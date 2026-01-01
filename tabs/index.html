@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="/styles.css" />
 
   <style>
-    /* Small page-specific additions (we can move these into styles.css later) */
     .toolbar{
       display:flex;
       gap: 12px;
@@ -89,6 +88,7 @@
       <a class="logo" href="/">FreeBassTabs</a>
       <nav class="nav">
         <a href="/tabs/">Tabs</a>
+        <a href="/request/">Request</a>
         <a href="/about/">About</a>
         <a href="/contact/">Contact</a>
       </nav>
@@ -102,6 +102,120 @@
     <div class="toolbar">
       <div class="search" role="search">
         <span aria-hidden="true">🔎</span>
-        <input id="q" type="search" placeholder="Search… e.g. ‘Green Day’ or ‘Basket Case’" autocomplete="off" />
+        <input id="q" type="search" placeholder="Search… e.g. ‘Violent Femmes’ or ‘Blister in the Sun’" autocomplete="off" />
       </div>
-      <div class="count"><span id="count">0</span>
+      <div class="count"><span id="count">0</span> tabs</div>
+    </div>
+
+    <ul class="list" id="cards"></ul>
+
+    <p class="note" style="margin-top:14px;">
+      Adding a new tab = upload files into <strong>/files/artist/song/</strong> and add one new entry in the <strong>TABS</strong> list.
+    </p>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <small><a href="/">Home</a> · <a href="/contact/">Takedown/Contact</a></small>
+    </div>
+  </footer>
+
+  <script>
+    // --- Tab library data ---
+    // Add new tabs by copying an object and updating fields + links.
+    const TABS = [
+      {
+        title: "Blister in the Sun",
+        artist: "The Violent Femmes",
+        tuning: "E Standard",
+        difficulty: "2/5",
+        technique: "Pick",
+        pdf: "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
+        gp:  "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp" // change to .gpx if needed
+      },
+
+      // Example (you can delete this later)
+      {
+        title: "Example Song",
+        artist: "Example Artist",
+        tuning: "E Standard",
+        difficulty: "2/5",
+        technique: "Fingerstyle",
+        pdf: "#",
+        gp:  "#"
+      }
+    ];
+
+    const $q = document.getElementById("q");
+    const $cards = document.getElementById("cards");
+    const $count = document.getElementById("count");
+
+    function normalise(s){ return (s || "").toLowerCase().trim(); }
+
+    function render(list){
+      $cards.innerHTML = "";
+      $count.textContent = list.length;
+
+      for (const t of list){
+        const li = document.createElement("li");
+
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.innerHTML = `<span>${t.title}</span> <span class="artist">— ${t.artist}</span>`;
+        li.appendChild(title);
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        meta.textContent = `${t.tuning} · Difficulty ${t.difficulty} · ${t.technique}`;
+        li.appendChild(meta);
+
+        const tags = document.createElement("div");
+        tags.className = "tags";
+        tags.innerHTML = `
+          <span class="tag">${t.tuning}</span>
+          <span class="tag">Difficulty ${t.difficulty}</span>
+          <span class="tag">${t.technique}</span>
+        `;
+        li.appendChild(tags);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const pdf = document.createElement("a");
+        pdf.className = "links";
+        pdf.href = t.pdf || "#";
+        pdf.textContent = "Download PDF";
+        if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
+
+        const gp = document.createElement("a");
+        gp.className = "links";
+        gp.href = t.gp || "#";
+        gp.textContent = "Download .gp";
+        if (!t.gp || t.gp === "#") gp.setAttribute("aria-disabled", "true");
+
+        actions.appendChild(pdf);
+        actions.appendChild(gp);
+        li.appendChild(actions);
+
+        $cards.appendChild(li);
+      }
+    }
+
+    function applySearch(){
+      const query = normalise($q.value);
+      if (!query) return render(TABS);
+
+      const filtered = TABS.filter(t => {
+        const hay = normalise(`${t.title} ${t.artist} ${t.tuning} ${t.technique}`);
+        return hay.includes(query);
+      });
+
+      render(filtered);
+    }
+
+    $q.addEventListener("input", applySearch);
+
+    render(TABS);
+  </script>
+</body>
+</html>
