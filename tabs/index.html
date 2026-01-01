@@ -89,23 +89,12 @@
     </div>
   </footer>
 
+  <script src="/data/tabs.js"></script>
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
 
     // Keep this list in sync with tabs/index.html
-    const TABS = [
-      {
-        id: "violent-femmes/blister-in-the-sun",
-        title: "Blister in the Sun",
-        artist: "The Violent Femmes",
-        key: "G",
-        tuning: "E Standard",
-        technique: "Pick",
-        added: "2026-01-01",
-        pdf: "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
-        gp:  "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp"
-      }
-    ];
+    const TABS = window.TABS || [];
 
     function formatAvg(x){
       if (typeof x !== "number" || Number.isNaN(x)) return "—";
