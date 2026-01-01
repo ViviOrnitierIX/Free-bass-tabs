@@ -1,0 +1,18 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.5; }
+a { color: inherit; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-weight: 800; text-decoration: none; }
+.nav a { margin-left: 12px; text-decoration: none; opacity: 0.9; }
+.nav a:hover { opacity: 1; text-decoration: underline; }
+.hero { padding: 28px 0; }
+.btn { display: inline-block; margin-top: 10px; padding: 10px 14px; border: 1px solid currentColor; border-radius: 10px; text-decoration: none; }
+.list { list-style: none; padding: 0; margin: 0; }
+.list li { padding: 12px 0; border-top: 1px solid rgba(127,127,127,0.25); }
+.meta { display: block; opacity: 0.75; font-size: 0.95rem; margin-top: 2px; }
+.links a { display: inline-block; margin-top: 6px; opacity: 0.9; }
+.links a:hover { opacity: 1; }
+.note { opacity: 0.75; }
+.footer { opacity: 0.75; padding-top: 22px; }
