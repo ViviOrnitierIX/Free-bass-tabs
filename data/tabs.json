@@ -1,15 +1,26 @@
 {
   "tabs": [
     {
-      "id": "violent-femmes/blister-in-the-sun",
-      "title": "Blister in the Sun",
-      "artist": "The Violent Femmes",
-      "key": "G",
-      "tuning": "E Standard",
-      "technique": "Pick",
       "added": "2026-01-01",
+      "artist": "The Violent Femmes",
+      "gp": "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp",
+      "technique": "Pick",
       "pdf": "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
-      "gp": "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp"
+      "tuning": "E Standard",
+      "title": "Blister in the Sun",
+      "id": "violent-femmes/blister-in-the-sun",
+      "key": "G"
+    },
+    {
+      "added": "2026-01-01",
+      "artist": "Foo Fighters",
+      "gp": "/files/uploads/foo-fighters-the-pretender-bass-08-06-2015.gp",
+      "technique": "Pick",
+      "pdf": "/files/uploads/blister-in-the-sun.pdf",
+      "tuning": "E Standard",
+      "title": "The Pretender",
+      "id": "foo-fighters/the-pretender",
+      "key": "A Minor"
     }
   ]
 }
