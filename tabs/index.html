@@ -4,10 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tabs | Free Bass Tabs</title>
-  <meta name="description" content="Browse free bass tabs (PDF / Guitar Pro) with a simple search." />
+  <meta name="description" content="Browse free bass tabs (PDF / Guitar Pro) with a simple search and star ratings." />
   <link rel="stylesheet" href="/styles.css" />
 
   <style>
+    /* Page-specific layout bits */
     .toolbar{
       display:flex;
       gap: 12px;
@@ -36,12 +37,12 @@
       color: var(--text);
     }
     .count{
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
       color: var(--muted);
     }
     .card-title{
-      font-weight: 800;
+      font-weight: 900;
       color: var(--text);
       display:flex;
       gap: 8px;
@@ -50,7 +51,7 @@
     }
     .card-title .artist{
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
     }
     .tags{
       display:flex;
@@ -65,7 +66,7 @@
       background: #ffffff;
       font-size: 12px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
     }
     .actions{
       display:flex;
@@ -80,8 +81,74 @@
       opacity: 0.45;
       pointer-events: none;
     }
+
+    /* Rating row */
+    .rating{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .rating-meta{
+      font-weight: 900;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .rating-meta strong{
+      color: var(--text);
+    }
+
+    /* Stars: empty by default, fill gold on hover + when selected */
+    .stars{
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      flex-direction: row-reverse; /* enables "fill to the left" with ~ selector */
+    }
+
+    .star-btn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0;
+      line-height: 1;
+      user-select: none;
+      transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .star-btn::before{
+      content: "☆";              /* empty star by default */
+      font-size: 18px;
+      color: #9aa3b2;
+    }
+    .star-btn:hover{
+      background: #f7f8fb;
+      transform: translateY(-1px);
+    }
+
+    /* Hover-fill: hovered star + all stars to the left become filled */
+    .star-btn:hover::before,
+    .star-btn:hover ~ .star-btn::before{
+      content: "★";
+      color: #d4af37;            /* gold */
+    }
+
+    /* Selected-fill: clicked star + all stars to the left become filled */
+    .star-btn.selected::before,
+    .star-btn.selected ~ .star-btn::before{
+      content: "★";
+      color: #d4af37;
+    }
   </style>
 </head>
+
 <body>
   <header class="header">
     <div class="wrap">
@@ -97,7 +164,7 @@
 
   <main class="wrap">
     <h1>Tabs</h1>
-    <p>Search by song or artist. Each tab has a PDF download and (where available) a Guitar Pro file.</p>
+    <p>Search by song or artist. Tabs are downloadable as PDF, with Guitar Pro where available. Rate tabs to surface the best ones.</p>
 
     <div class="toolbar">
       <div class="search" role="search">
@@ -122,28 +189,17 @@
 
   <script>
     // --- Tab library data ---
-    // Add new tabs by copying an object and updating fields + links.
+    // Each tab MUST have a unique id (slug). Example: "violent-femmes/blister-in-the-sun"
     const TABS = [
       {
         id: "violent-femmes/blister-in-the-sun",
         title: "Blister in the Sun",
         artist: "The Violent Femmes",
+        key: "G",
         tuning: "E Standard",
-        key: "G Major",
         technique: "Pick",
         pdf: "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
         gp:  "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp" // change to .gpx if needed
-      },
-
-      // Example (you can delete this later)
-      {
-        title: "Example Song",
-        artist: "Example Artist",
-        tuning: "E Standard",
-        difficulty: "2/5",
-        technique: "Fingerstyle",
-        pdf: "#",
-        gp:  "#"
       }
     ];
 
@@ -151,7 +207,77 @@
     const $cards = document.getElementById("cards");
     const $count = document.getElementById("count");
 
+    // Ratings map: { tab_id: { avg: number, count: number } }
+    let RATINGS = {};
+
     function normalise(s){ return (s || "").toLowerCase().trim(); }
+
+    function formatAvg(x){
+      if (typeof x !== "number" || Number.isNaN(x)) return "—";
+      return (Math.round(x * 10) / 10).toFixed(1);
+    }
+
+    function sortByRating(list){
+      return [...list].sort((a, b) => {
+        const ra = RATINGS[a.id]?.avg ?? 0;
+        const rb = RATINGS[b.id]?.avg ?? 0;
+        const ca = RATINGS[a.id]?.count ?? 0;
+        const cb = RATINGS[b.id]?.count ?? 0;
+
+        if (rb !== ra) return rb - ra;
+        if (cb !== ca) return cb - ca;
+        return (a.title || "").localeCompare(b.title || "");
+      });
+    }
+
+    async function loadRatings(){
+      try{
+        const res = await fetch("/api/ratings", { headers: { "Accept": "application/json" } });
+        if (!res.ok) throw new Error("ratings http " + res.status);
+        RATINGS = await res.json();
+      } catch {
+        RATINGS = {};
+      }
+    }
+
+    function makeStars(tab){
+      const wrap = document.createElement("div");
+      wrap.className = "stars";
+
+      // Create buttons in reverse (5..1) to match row-reverse hover-fill CSS
+      for (let i = 5; i >= 1; i--){
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "star-btn";
+        btn.dataset.value = String(i);
+        btn.setAttribute("aria-label", `Rate ${tab.title}: ${i} star${i === 1 ? "" : "s"}`);
+
+        btn.addEventListener("click", async () => {
+          // Make selection stick visually
+          [...wrap.querySelectorAll(".star-btn")].forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+
+          try{
+            const r = await fetch("/api/rate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "Accept": "application/json" },
+              body: JSON.stringify({ id: tab.id, rating: i })
+            });
+            if (!r.ok) throw new Error("rate http " + r.status);
+
+            await loadRatings();
+            applySearch(); // refresh + keep sorting accurate
+          } catch {
+            // If it fails, just re-render what we have
+            applySearch();
+          }
+        });
+
+        wrap.appendChild(btn);
+      }
+
+      return wrap;
+    }
 
     function render(list){
       $cards.innerHTML = "";
@@ -167,14 +293,14 @@
 
         const meta = document.createElement("div");
         meta.className = "meta";
-        meta.textContent = `${t.key || "Key ?"} · ${t.tuning} Tuning · ${t.technique}`;
+        meta.textContent = `${t.key ? `Key ${t.key}` : "Key ?"} · ${t.tuning} tuning · ${t.technique}`;
         li.appendChild(meta);
 
         const tags = document.createElement("div");
         tags.className = "tags";
         tags.innerHTML = `
           <span class="tag">${t.key ? `Key ${t.key}` : "Key ?"}</span>
-          <span class="tag">${t.tuning} Tuning</span>
+          <span class="tag">${t.tuning} tuning</span>
           <span class="tag">${t.technique}</span>
         `;
         li.appendChild(tags);
@@ -198,15 +324,39 @@
         actions.appendChild(gp);
         li.appendChild(actions);
 
+        // Rating row
+        const ratingRow = document.createElement("div");
+        ratingRow.className = "rating";
+
+        const stars = makeStars(t);
+
+        const avg = RATINGS[t.id]?.avg ?? null;
+        const count = RATINGS[t.id]?.count ?? 0;
+
+        const metaBox = document.createElement("div");
+        metaBox.className = "rating-meta";
+        metaBox.innerHTML = `<strong>★ ${avg ? formatAvg(avg) : "—"}</strong> <span>(${count} rating${count === 1 ? "" : "s"})</span>`;
+
+        ratingRow.appendChild(stars);
+        ratingRow.appendChild(metaBox);
+        li.appendChild(ratingRow);
+
         $cards.appendChild(li);
       }
     }
 
     function applySearch(){
       const query = normalise($q.value);
-      if (!query) return render(TABS);
 
-      const filtered = TABS.filter(t => {
+      // Default list is sorted by rating
+      const base = sortByRating(TABS);
+
+      if (!query) {
+        render(base);
+        return;
+      }
+
+      const filtered = base.filter(t => {
         const hay = normalise(`${t.title} ${t.artist} ${t.key || ""} ${t.tuning} ${t.technique}`);
         return hay.includes(query);
       });
@@ -214,9 +364,12 @@
       render(filtered);
     }
 
-    $q.addEventListener("input", applySearch);
-
-    render(TABS);
+    // Boot
+    (async () => {
+      await loadRatings();
+      applySearch();
+      $q.addEventListener("input", applySearch);
+    })();
   </script>
 </body>
 </html>
