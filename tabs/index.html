@@ -355,7 +355,7 @@ let TABS = [];
 
       <div class="actions">
   <a class="links"
-     href="${t.pdf || "#"}"
+     href="${t.pdf ? `${t.pdf}?v=${encodeURIComponent(t.id)}` : "#"}"
      target="_blank"
      rel="noopener noreferrer"
      ${(!t.pdf || t.pdf === "#") ? 'aria-disabled="true"' : ""}>
