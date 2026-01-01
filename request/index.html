@@ -3,99 +3,193 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Request a Tab | Free Bass Tabs</title>
-  <meta name="description" content="Request a bass tab. Submit artist and song name." />
+  <title>Request | FreeBassTabs</title>
+  <meta name="description" content="Request a tab (or submit a takedown request) without exposing an email address." />
   <link rel="stylesheet" href="/styles.css" />
 
   <style>
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-top: 14px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
     .panel{
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: #fff;
       padding: 18px;
       box-shadow: var(--shadow-sm);
-      max-width: 720px;
     }
-    label{
-      display:block;
-      font-weight: 800;
-      margin: 14px 0 8px;
+
+    .field{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .field label{
+      font-weight: 900;
       color: var(--text);
-      letter-spacing: -0.01em;
+      font-size: 13px;
     }
-    input{
+    .field input, .field textarea, .field select{
       width: 100%;
-      padding: 12px 14px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #f7f8fb;
+      border-radius: 14px;
+      padding: 12px 12px;
       font-size: 14px;
       outline: none;
+      background: #fff;
       color: var(--text);
     }
-    input:focus{
-      background: #fff;
-      border-color: #cfd5e3;
+    .field textarea{ min-height: 110px; resize: vertical; }
+
+    .hint{
+      margin-top: 10px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.4;
     }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 640px){
-      .row{ grid-template-columns: 1fr; }
-    }
+
     .actions{
       display:flex;
       gap: 10px;
-      align-items:center;
-      margin-top: 16px;
       flex-wrap: wrap;
+      margin-top: 14px;
+      align-items:center;
     }
-    .status{
-      font-weight: 700;
-      font-size: 13px;
+
+    .pill{
+      display:inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f7f8fb;
+      font-size: 12px;
       color: var(--muted);
+      font-weight: 900;
+      margin-left: 8px;
+      vertical-align: middle;
     }
-    .status.ok{ color: #0a7a3b; }
-    .status.bad{ color: #b42318; }
-    .fineprint{
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--muted);
+
+    .nav a.active{
+      color: var(--text);
+      font-weight: 900;
+      position: relative;
+    }
+    .nav a.active::after{
+      content:"";
+      position:absolute;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 999px;
+      opacity: 0.15;
     }
   </style>
 </head>
+
 <body>
   <header class="header">
     <div class="wrap">
       <a class="logo" href="/">FreeBassTabs</a>
       <nav class="nav">
         <a href="/tabs/">Tabs</a>
-        <a href="/request/">Request</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
+        <a class="active" href="/request/">Request</a>
       </nav>
     </div>
   </header>
 
   <main class="wrap">
-    <h1>Request a Tab</h1>
-    <p>Fill in the artist and song name. Requests come straight to me — your browser won’t reveal my email address.</p>
+    <h1>Request a tab</h1>
+    <p class="note">Send a request without exposing an email address. If I end up transcribing it, it’ll be added to the library for free.</p>
 
-    <div class="panel">
-      <form id="reqForm">
-        <div class="row">
-          <div>
+    <section class="grid">
+      <div class="panel">
+        <h2 style="margin-top:0;">Tab request</h2>
+
+        <!-- Replace ACTION with your Formspree (or other) endpoint -->
+        <form action="PASTE_YOUR_FORM_ENDPOINT_HERE" method="POST">
+          <div class="field">
             <label for="artist">Band / Artist</label>
-            <input id="artist" name="artist" placeholder="e.g. Green Day" required />
+            <input id="artist" name="artist" type="text" placeholder="e.g. The Violent Femmes" required />
           </div>
-          <div>
-            <label for="song">Song name</label>
-            <input id="song" name="song" placeholder="e.g. Basket Case" required />
-          </div>
-        </div>
 
-        <div class="actions">
-          <button class="btn" type="submit">Submit request</button>
-          <span id="status" class="stat
+          <div class="field">
+            <label for="song">Song name</label>
+            <input id="song" name="song" type="text" placeholder="e.g. Blister in the Sun" required />
+          </div>
+
+          <div class="field">
+            <label for="notes">Notes (optional) <span class="pill">optional</span></label>
+            <textarea id="notes" name="notes" placeholder="Anything helpful: version/live recording, tuning, or why you love the song…"></textarea>
+          </div>
+
+          <!-- Helps you filter in your inbox -->
+          <input type="hidden" name="type" value="tab-request" />
+
+          <div class="actions">
+            <button class="btn" type="submit">Submit request</button>
+            <span class="hint">No promises — but I do read everything.</span>
+          </div>
+        </form>
+      </div>
+
+      <aside class="panel">
+        <h2 style="margin-top:0;">Takedown / rights holders</h2>
+        <p class="hint" style="margin-top:0;">
+          If you’re a rights holder (or representing one) and want a tab removed, use the takedown form below.
+          I’ll take it down quickly once verified.
+        </p>
+
+        <!-- Replace ACTION with your same endpoint (or a separate one if you want) -->
+        <form action="PASTE_YOUR_FORM_ENDPOINT_HERE" method="POST">
+          <div class="field">
+            <label for="work">Work / URL to remove</label>
+            <input id="work" name="work" type="text" placeholder="Paste the tab page URL or song/artist" required />
+          </div>
+
+          <div class="field">
+            <label for="claim">Reason / details</label>
+            <textarea id="claim" name="claim" placeholder="Briefly explain what you represent and what should be removed." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="contact">Your contact email</label>
+            <input id="contact" name="contact_email" type="email" placeholder="name@company.com" required />
+          </div>
+
+          <input type="hidden" name="type" value="takedown-request" />
+
+          <div class="actions">
+            <button class="btn secondary" type="submit">Submit takedown</button>
+          </div>
+
+          <p class="hint">
+            This site is a free hobby project. The goal is to respect rights holders — if something shouldn’t be here, it’ll be removed.
+          </p>
+        </form>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <small>© <span id="y"></span> FreeBassTabs</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
