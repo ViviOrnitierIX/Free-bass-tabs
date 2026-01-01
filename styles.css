@@ -124,6 +124,17 @@ main.wrap{ padding-top: 28px; padding-bottom: 40px; }
   filter: brightness(0.96);
 }
 
+.btn.secondary{
+  background: #f7f8fb;
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.btn.secondary:hover{
+  background: #eef1f7;
+}
+
+
 .note{
   color: var(--muted);
   font-size: 14px;
