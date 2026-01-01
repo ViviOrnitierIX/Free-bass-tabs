@@ -21,6 +21,17 @@
       "title": "The Pretender",
       "id": "foo-fighters/the-pretender",
       "key": "A Minor"
+    },
+    {
+      "added": "2026-01-01",
+      "artist": "No Doubt",
+      "gp": "/files/uploads/spiderwebs.gp",
+      "technique": "Fingerpick",
+      "pdf": "/files/uploads/spiderwebs.pdf",
+      "tuning": "E Standard",
+      "title": "Spiderwebs",
+      "id": "no-doubt/spiderwebs",
+      "key": "Bb Major"
     }
   ]
 }
