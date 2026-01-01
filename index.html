@@ -158,11 +158,19 @@
   </footer>
 
   <!-- Single source of truth for the tab list -->
-  <script src="/data/tabs.js"></script>
+  
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
-    const TABS = window.TABS || [];
+
+    async function loadTabs(){
+  const res = await fetch("/data/tabs.json", { headers: { "Accept": "application/json" } });
+  if (!res.ok) throw new Error("tabs http " + res.status);
+  const data = await res.json();
+  return Array.isArray(data.tabs) ? data.tabs : [];
+}
+
+let TABS = [];
 
     function formatAvg(x){
       if (typeof x !== "number" || Number.isNaN(x)) return "—";
@@ -280,10 +288,17 @@
     }
 
     (async () => {
-      const ratings = await loadRatings();
-      renderTopRated(ratings);
-      renderNewest();
-    })();
+  try{
+    TABS = await loadTabs();
+  } catch {
+    TABS = [];
+  }
+
+  const ratings = await loadRatings();
+  renderTopRated(ratings);
+  renderNewest();
+})();
+
   </script>
 </body>
 </html>
