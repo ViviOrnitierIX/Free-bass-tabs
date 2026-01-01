@@ -25,11 +25,10 @@
       padding: 18px;
       box-shadow: var(--shadow-sm);
     }
-    .span-2{ grid-column: 1 / -1; }
 
     .kpis{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-top: 14px;
     }
@@ -65,6 +64,23 @@
     .row-actions a{ text-decoration:none; }
 
     .muted{ color: var(--muted); }
+
+    .support{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #f7f8fb;
+    }
+    .support p{
+      margin: 0;
+      flex: 1;
+      min-width: 240px;
+    }
   </style>
 </head>
 <body>
@@ -74,8 +90,6 @@
       <nav class="nav">
         <a href="/tabs/">Tabs</a>
         <a href="/request/">Request</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
       </nav>
     </div>
   </header>
@@ -103,10 +117,16 @@
           <strong id="kpiTop">—</strong>
           <span>Top rated</span>
         </div>
-        <div class="kpi">
-          <strong>£0</strong>
-          <span>Always free</span>
-        </div>
+      </div>
+
+      <div class="support">
+        <p class="muted">
+          Everything here will <strong>always</strong> be free. If you enjoy the tabs and want to support the site,
+          you can buy me a coffee — totally optional.
+        </p>
+        <a class="btn secondary" href="buymeacoffee.com/FreeBassTabs" target="_blank" rel="noopener noreferrer">
+          Buy me a coffee
+        </a>
       </div>
     </section>
 
@@ -128,30 +148,12 @@
           <a href="/tabs/?sort=newest">Browse newest</a>
         </p>
       </div>
-
-      <div class="panel span-2">
-        <h2>What you’ll find here</h2>
-        <ul class="list">
-          <li>
-            <strong>Bass-specific transcriptions</strong>
-            <span class="meta">Focused on the bassline rather than full-band charts.</span>
-          </li>
-          <li>
-            <strong>PDF downloads</strong>
-            <span class="meta">Readable on phone/tablet and easy to print.</span>
-          </li>
-          <li>
-            <strong>Guitar Pro files where available</strong>
-            <span class="meta">For looping and slowing down sections.</span>
-          </li>
-        </ul>
-      </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="wrap">
-      <small>© <span id="y"></span> FreeBassTabs · <a href="/contact/">Takedown/Contact</a></small>
+      <small>© <span id="y"></span> FreeBassTabs</small>
     </div>
   </footer>
 
@@ -160,7 +162,6 @@
 
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
-
     const TABS = window.TABS || [];
 
     function formatAvg(x){
