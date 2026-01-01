@@ -83,6 +83,7 @@
     }
   </style>
 </head>
+
 <body>
   <header class="header">
     <div class="wrap">
@@ -124,7 +125,10 @@
           Everything here will <strong>always</strong> be free. If you enjoy the tabs and want to support the site,
           you can buy me a coffee — totally optional.
         </p>
-        <a class="btn secondary" href="https://www.buymeacoffee.com/FreeBassTabs" target="_blank" rel="noopener noreferrer">
+        <a class="btn secondary"
+           href="https://www.buymeacoffee.com/FreeBassTabs"
+           target="_blank"
+           rel="noopener noreferrer">
           Buy me a coffee
         </a>
       </div>
@@ -157,20 +161,25 @@
     </div>
   </footer>
 
-  <!-- Single source of truth for the tab list -->
-  
-
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
 
     async function loadTabs(){
-  const res = await fetch("/data/tabs.json", { headers: { "Accept": "application/json" } });
-  if (!res.ok) throw new Error("tabs http " + res.status);
-  const data = await res.json();
-  return Array.isArray(data.tabs) ? data.tabs : [];
-}
+      const res = await fetch("/data/tabs.json", { headers: { "Accept": "application/json" } });
+      if (!res.ok) throw new Error("tabs http " + res.status);
+      const data = await res.json();
+      return Array.isArray(data.tabs) ? data.tabs : [];
+    }
 
-let TABS = [];
+    async function loadRatings(){
+      try{
+        const res = await fetch("/api/ratings", { headers: { "Accept": "application/json" } });
+        if (!res.ok) throw new Error("ratings http " + res.status);
+        return await res.json();
+      } catch {
+        return {};
+      }
+    }
 
     function formatAvg(x){
       if (typeof x !== "number" || Number.isNaN(x)) return "—";
@@ -183,14 +192,11 @@ let TABS = [];
       return Number.isFinite(n) ? n : 0;
     }
 
-    async function loadRatings(){
-      try{
-        const res = await fetch("/api/ratings", { headers: { "Accept": "application/json" } });
-        if (!res.ok) throw new Error("ratings http " + res.status);
-        return await res.json();
-      } catch {
-        return {};
-      }
+    // Cache-buster to avoid Firefox PDF viewer state/caching weirdness
+    function withBust(url, id){
+      if (!url) return "#";
+      const sep = url.includes("?") ? "&" : "?";
+      return `${url}${sep}v=${encodeURIComponent(id || "1")}`;
     }
 
     function makeTabCard(t, extraLineHtml){
@@ -213,19 +219,23 @@ let TABS = [];
       open.textContent = "Open in Tabs";
 
       const pdf = document.createElement("a");
-pdf.className = "links";
-pdf.href = t.pdf || "#";
-pdf.textContent = "Download PDF";
-pdf.target = "_blank";
-pdf.rel = "noopener noreferrer";
-if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
+      pdf.className = "links";
+      pdf.href = t.pdf ? withBust(t.pdf, t.id) : "#";
+      pdf.textContent = "Download PDF";
+      pdf.target = "_blank";
+      pdf.rel = "noopener noreferrer";
+      if (!t.pdf) pdf.setAttribute("aria-disabled", "true");
 
+      actions.appendChild(open);
+      actions.appendChild(pdf);
 
       if (t.gp) {
         const gp = document.createElement("a");
         gp.className = "links";
-        gp.href = t.gp;
+        gp.href = withBust(t.gp, t.id);
         gp.textContent = "Download .gp";
+        gp.target = "_blank";
+        gp.rel = "noopener noreferrer";
         actions.appendChild(gp);
       }
 
@@ -233,7 +243,7 @@ if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
       return li;
     }
 
-    function renderTopRated(ratings){
+    function renderTopRated(TABS, ratings){
       document.getElementById("kpiCount").textContent = String(TABS.length);
 
       const merged = TABS.map(t => {
@@ -269,7 +279,7 @@ if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
       }
     }
 
-    function renderNewest(){
+    function renderNewest(TABS){
       const sorted = [...TABS].sort((a,b) => dateNum(b.added) - dateNum(a.added));
       const newest = sorted.slice(0, 3);
 
@@ -289,17 +299,17 @@ if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
     }
 
     (async () => {
-  try{
-    TABS = await loadTabs();
-  } catch {
-    TABS = [];
-  }
+      let TABS = [];
+      try{
+        TABS = await loadTabs();
+      } catch {
+        TABS = [];
+      }
 
-  const ratings = await loadRatings();
-  renderTopRated(ratings);
-  renderNewest();
-})();
-
+      const ratings = await loadRatings();
+      renderTopRated(TABS, ratings);
+      renderNewest(TABS);
+    })();
   </script>
 </body>
 </html>
