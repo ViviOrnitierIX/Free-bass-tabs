@@ -331,68 +331,50 @@ let TABS = [];
     }
 
     function render(list){
-      $cards.innerHTML = "";
-      $count.textContent = list.length;
+  $cards.innerHTML = "";
+  $count.textContent = list.length;
 
-      for (const t of list){
-        const li = document.createElement("li");
+  for (const t of list){
+    const avg = RATINGS[t.id]?.avg ?? null;
+    const count = RATINGS[t.id]?.count ?? 0;
 
-        const title = document.createElement("div");
-        title.className = "card-title";
-        title.innerHTML = `<span>${t.title}</span> <span class="artist">— ${t.artist}</span>`;
-        li.appendChild(title);
+    const li = document.createElement("li");
 
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        meta.textContent = `${t.key ? `Key ${t.key}` : "Key ?"} · ${t.tuning} tuning · ${t.technique}`;
-        li.appendChild(meta);
+    li.innerHTML = `
+      <div class="card-title">
+        <span>${t.title}</span> <span class="artist">— ${t.artist}</span>
+      </div>
 
-        const tags = document.createElement("div");
-        tags.className = "tags";
-        tags.innerHTML = `
-          <span class="tag">${t.key ? `Key ${t.key}` : "Key ?"}</span>
-          <span class="tag">${t.tuning} tuning</span>
-          <span class="tag">${t.technique}</span>
-        `;
-        li.appendChild(tags);
+      <div class="meta">${t.key ? `Key ${t.key}` : "Key ?"} · ${t.tuning} tuning · ${t.technique}</div>
 
-        const actions = document.createElement("div");
-        actions.className = "actions";
+      <div class="tags">
+        <span class="tag">${t.key ? `Key ${t.key}` : "Key ?"}</span>
+        <span class="tag">${t.tuning} tuning</span>
+        <span class="tag">${t.technique}</span>
+      </div>
 
-        const pdf = document.createElement("a");
-        pdf.className = "links";
-        pdf.href = t.pdf || "#";
-        pdf.textContent = "Download PDF";
-        if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
+      <div class="actions">
+        <a class="links" href="${t.pdf || "#"}" ${(!t.pdf || t.pdf === "#") ? 'aria-disabled="true"' : ""}>Download PDF</a>
+        <a class="links" href="${t.gp || "#"}" ${(!t.gp || t.gp === "#") ? 'aria-disabled="true"' : ""}>Download .gp</a>
+      </div>
 
-        const gp = document.createElement("a");
-        gp.className = "links";
-        gp.href = t.gp || "#";
-        gp.textContent = "Download .gp";
-        if (!t.gp || t.gp === "#") gp.setAttribute("aria-disabled", "true");
+      <div class="rating">
+        <div class="stars" data-stars-for="${t.id}"></div>
+        <div class="rating-meta">
+          <strong>★ ${avg ? formatAvg(avg) : "—"}</strong> <span>(${count} rating${count === 1 ? "" : "s"})</span>
+        </div>
+      </div>
+    `;
 
-        actions.appendChild(pdf);
-        actions.appendChild(gp);
-        li.appendChild(actions);
+    // Build stars fresh per card (so nothing gets reused)
+    const starsHost = li.querySelector(`[data-stars-for="${t.id}"]`);
+    const stars = makeStars(t);
+    starsHost.replaceWith(stars);
 
-        const ratingRow = document.createElement("div");
-        ratingRow.className = "rating";
+    $cards.appendChild(li);
+  }
+}
 
-        const stars = makeStars(t);
-        const avg = RATINGS[t.id]?.avg ?? null;
-        const count = RATINGS[t.id]?.count ?? 0;
-
-        const metaBox = document.createElement("div");
-        metaBox.className = "rating-meta";
-        metaBox.innerHTML = `<strong>★ ${avg ? formatAvg(avg) : "—"}</strong> <span>(${count} rating${count === 1 ? "" : "s"})</span>`;
-
-        ratingRow.appendChild(stars);
-        ratingRow.appendChild(metaBox);
-        li.appendChild(ratingRow);
-
-        $cards.appendChild(li);
-      }
-    }
 
     function apply(){
       const query = normalise($q.value);
