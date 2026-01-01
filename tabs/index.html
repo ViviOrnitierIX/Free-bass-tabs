@@ -125,10 +125,11 @@
     // Add new tabs by copying an object and updating fields + links.
     const TABS = [
       {
+        id: "violent-femmes/blister-in-the-sun",
         title: "Blister in the Sun",
         artist: "The Violent Femmes",
         tuning: "E Standard",
-        difficulty: "2/5",
+        key: "G Major",
         technique: "Pick",
         pdf: "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
         gp:  "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp" // change to .gpx if needed
@@ -166,14 +167,14 @@
 
         const meta = document.createElement("div");
         meta.className = "meta";
-        meta.textContent = `${t.tuning} · Difficulty ${t.difficulty} · ${t.technique}`;
+        meta.textContent = `${t.key || "Key ?"} · ${t.tuning} · ${t.technique}`;
         li.appendChild(meta);
 
         const tags = document.createElement("div");
         tags.className = "tags";
         tags.innerHTML = `
+          <span class="tag">${t.key ? `Key ${t.key}` : "Key ?"}</span>
           <span class="tag">${t.tuning}</span>
-          <span class="tag">Difficulty ${t.difficulty}</span>
           <span class="tag">${t.technique}</span>
         `;
         li.appendChild(tags);
@@ -206,7 +207,7 @@
       if (!query) return render(TABS);
 
       const filtered = TABS.filter(t => {
-        const hay = normalise(`${t.title} ${t.artist} ${t.tuning} ${t.technique}`);
+        const hay = normalise(`${t.title} ${t.artist} ${t.key || ""} ${t.tuning} ${t.technique}`);
         return hay.includes(query);
       });
 
