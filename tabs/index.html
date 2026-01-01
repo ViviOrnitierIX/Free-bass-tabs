@@ -354,9 +354,23 @@ let TABS = [];
       </div>
 
       <div class="actions">
-        <a class="links" href="${t.pdf || "#"}" ${(!t.pdf || t.pdf === "#") ? 'aria-disabled="true"' : ""}>Download PDF</a>
-        <a class="links" href="${t.gp || "#"}" ${(!t.gp || t.gp === "#") ? 'aria-disabled="true"' : ""}>Download .gp</a>
-      </div>
+  <a class="links"
+     href="${t.pdf || "#"}"
+     target="_blank"
+     rel="noopener noreferrer"
+     ${(!t.pdf || t.pdf === "#") ? 'aria-disabled="true"' : ""}>
+    Download PDF
+  </a>
+
+  <a class="links"
+     href="${t.gp || "#"}"
+     target="_blank"
+     rel="noopener noreferrer"
+     ${(!t.gp || t.gp === "#") ? 'aria-disabled="true"' : ""}>
+    Download .gp
+  </a>
+</div>
+
 
       <div class="rating">
         <div class="stars" data-stars-for="${t.id}"></div>
