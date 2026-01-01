@@ -225,12 +225,18 @@
     </div>
   </footer>
 
-  <script src="/data/tabs.js"></script>
-
   <script>
     document.getElementById("y").textContent = new Date().getFullYear();
 
-    const TABS = window.TABS || [];
+    async function loadTabs(){
+  const res = await fetch("/data/tabs.json", { headers: { "Accept": "application/json" } });
+  if (!res.ok) throw new Error("tabs http " + res.status);
+  const data = await res.json();
+  return Array.isArray(data.tabs) ? data.tabs : [];
+}
+
+let TABS = [];
+
 
     const $q = document.getElementById("q");
     const $cards = document.getElementById("cards");
@@ -411,14 +417,23 @@
     }
 
     (async () => {
-      const params = new URLSearchParams(location.search);
-      const q = params.get("q");
-      const sort = params.get("sort");
-      if (q) $q.value = q;
-      if (sort && ["top","newest","az"].includes(sort)) $sort.value = sort;
+  const params = new URLSearchParams(location.search);
+  const q = params.get("q");
+  const sort = params.get("sort");
+  if (q) $q.value = q;
+  if (sort && ["top","newest","az"].includes(sort)) $sort.value = sort;
 
-      await loadRatings();
-      apply();
+  try{
+    TABS = await loadTabs();
+  } catch {
+    TABS = [];
+  }
+
+  await loadRatings();
+  apply();
+
+
+
 
       $q.addEventListener("input", apply);
       $sort.addEventListener("change", apply);
