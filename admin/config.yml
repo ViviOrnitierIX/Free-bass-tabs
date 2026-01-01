@@ -1,10 +1,9 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  repo: ViviOrnitierIX/Free-bass-tabs
   branch: main
 
-  # We'll set this up next step (OAuth helper on Cloudflare Workers)
-  base_url: https://YOUR-AUTH-WORKER-DOMAIN.example
+  base_url: https://sveltia-cms-auth.8g8hs9vm9w.workers.dev
   auth_endpoint: /auth
 
 media_folder: "files/uploads"
