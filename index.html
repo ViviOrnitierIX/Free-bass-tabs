@@ -213,12 +213,13 @@ let TABS = [];
       open.textContent = "Open in Tabs";
 
       const pdf = document.createElement("a");
-      pdf.className = "links";
-      pdf.href = t.pdf || "#";
-      pdf.textContent = "Download PDF";
+pdf.className = "links";
+pdf.href = t.pdf || "#";
+pdf.textContent = "Download PDF";
+pdf.target = "_blank";
+pdf.rel = "noopener noreferrer";
+if (!t.pdf || t.pdf === "#") pdf.setAttribute("aria-disabled", "true");
 
-      actions.appendChild(open);
-      actions.appendChild(pdf);
 
       if (t.gp) {
         const gp = document.createElement("a");
