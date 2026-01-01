@@ -1,14 +1,1 @@
-// Single source of truth for all tabs
-window.TABS = [
-  {
-    id: "violent-femmes/blister-in-the-sun",
-    title: "Blister in the Sun",
-    artist: "The Violent Femmes",
-    key: "G",
-    tuning: "E Standard",
-    technique: "Pick",
-    added: "2026-01-01",
-    pdf: "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.pdf",
-    gp:  "/files/violent-femmes/blister-in-the-sun/blister-in-the-sun.gp"
-  }
-];
+
