@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Bass Tabs</title>
+  <meta name="description" content="Free bass tabs (PDF) made by ear. Download, play, enjoy." />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="wrap header">
+    <a class="logo" href="/">FreeBassTabs</a>
+    <nav class="nav">
+      <a href="/tabs/">Tabs</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Free Bass Tabs</h1>
+      <p>Download bass tabs I’ve written. PDFs are free. New tabs added regularly.</p>
+      <a class="btn" href="/tabs/">Browse all tabs</a>
+    </section>
+
+    <section>
+      <h2>Latest tabs</h2>
+      <ul class="list">
+        <li>
+          <strong>Example Song</strong> — Example Artist
+          <span class="meta">E Standard · Difficulty 2/5</span>
+          <span class="links">
+            <a href="#">PDF (coming soon)</a>
+          </span>
+        </li>
+      </ul>
+      <p class="note">We’ll replace this with real tabs + downloads in a later step.</p>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <small>© <span id="y"></span> FreeBassTabs. <a href="/contact/">Takedown/Contact</a></small>
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
