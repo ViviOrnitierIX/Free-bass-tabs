@@ -1,35 +1,83 @@
-<main class="wrap">
-  <section class="hero">
-    <h1>Free bass tabs that actually focus on the bass.</h1>
-    <p>
-      I made this site because a lot of “free tab” resources are really full-band transcriptions that
-      gloss over what the bass is doing — the little movements, the feel, and the parts that make the groove work.
-      Everything here is written specifically for bass and shared for free.
-    </p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Bass Tabs</title>
+  <meta name="description" content="Free bass tabs (PDF + Guitar Pro where available) written specifically for bass." />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="wrap">
+      <a class="logo" href="/">FreeBassTabs</a>
+      <nav class="nav">
+        <a href="/tabs/">Tabs</a>
+        <a href="/request/">Request</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-    <a class="btn" href="/tabs/">Browse tabs</a>
-  </section>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Free bass tabs that actually focus on the bass.</h1>
+      <p>
+        I made this site because a lot of “free tab” resources are really full-band transcriptions that
+        gloss over what the bass is doing — the little movements, the feel, and the parts that make the groove work.
+        Everything here is written specifically for bass and shared for free.
+      </p>
 
-  <section style="margin-top:18px;">
-    <h2>What you’ll find here</h2>
+      <a class="btn" href="/tabs/">Browse tabs</a>
+    </section>
 
-    <ul class="list">
-      <li>
-        <strong>Clean, readable PDFs</strong>
-        <span class="meta">Great on phone/tablet, easy to print.</span>
-      </li>
-      <li>
-        <strong>Guitar Pro files where available</strong>
-        <span class="meta">Slow it down, loop sections, change tempo.</span>
-      </li>
-      <li>
-        <strong>Notes that help you play it right</strong>
-        <span class="meta">Tuning, technique hints, and “watch out for this bar” pointers.</span>
-      </li>
-    </ul>
+    <section style="margin-top:18px;">
+      <h2>What you’ll find here</h2>
 
-    <p class="note" style="margin-top:14px;">
-      Want something added? Use the <a href="/request/">Request</a> page.
-    </p>
-  </section>
-</main>
+      <ul class="list">
+        <li>
+          <strong>Clean, readable PDFs</strong>
+          <span class="meta">Great on phone/tablet, easy to print.</span>
+        </li>
+        <li>
+          <strong>Guitar Pro files where available</strong>
+          <span class="meta">Slow it down, loop sections, change tempo.</span>
+        </li>
+        <li>
+          <strong>Notes that help you play it right</strong>
+          <span class="meta">Tuning, technique hints, and “watch out for this bar” pointers.</span>
+        </li>
+      </ul>
+
+      <p class="note" style="margin-top:14px;">
+        Want something added? Use the <a href="/request/">Request</a> page.
+      </p>
+    </section>
+
+    <section style="margin-top:22px;">
+      <h2>Latest tabs</h2>
+      <ul class="list">
+        <li>
+          <strong>Example Song</strong> — Example Artist
+          <span class="meta">E Standard · Difficulty 2/5 · Fingerstyle</span>
+          <span class="links"><a href="/tabs/">View all tabs</a></span>
+        </li>
+      </ul>
+      <p class="note" style="margin-top:12px;">
+        As you add tabs, we can make this section automatically show your newest uploads.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <small>© <span id="y"></span> FreeBassTabs · <a href="/contact/">Takedown/Contact</a></small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
