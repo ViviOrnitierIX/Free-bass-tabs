@@ -54,6 +54,17 @@
       "title": "Epiphany",
       "id": "bad-religion/epiphany",
       "key": "D minor"
+    },
+    {
+      "added": "2026-01-06",
+      "artist": "Mad Caddies",
+      "gp": "/files/uploads/mad-caddies-she.gp",
+      "technique": "Fingerpick",
+      "pdf": "/files/uploads/she.pdf",
+      "tuning": "E Standard",
+      "title": "She",
+      "id": "mad-caddies/she",
+      "key": "F#"
     }
   ]
 }
