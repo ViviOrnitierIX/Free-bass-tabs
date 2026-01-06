@@ -65,6 +65,17 @@
       "title": "She",
       "id": "mad-caddies/she",
       "key": "F#"
+    },
+    {
+      "added": "2026-01-06",
+      "artist": "Mad Caddies",
+      "gp": "/files/uploads/mad-caddies-betty.gp",
+      "technique": "Fingerpick",
+      "pdf": "/files/uploads/betty.pdf",
+      "tuning": "E Standard",
+      "title": "Betty",
+      "id": "mad-caddies/betty",
+      "key": "D"
     }
   ]
 }
