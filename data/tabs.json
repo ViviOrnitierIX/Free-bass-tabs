@@ -43,6 +43,17 @@
       "title": "Still Into You",
       "id": "paramore/still-into-you",
       "key": "F"
+    },
+    {
+      "added": "2026-01-06",
+      "artist": "Bad Religion",
+      "gp": "/files/uploads/bad-religion-epiphany.gp",
+      "technique": "Pick",
+      "pdf": "/files/uploads/ephipany.pdf",
+      "tuning": "E Standard",
+      "title": "Epiphany",
+      "id": "bad-religion/epiphany",
+      "key": "D minor"
     }
   ]
 }
