@@ -32,6 +32,17 @@
       "title": "Spiderwebs",
       "id": "no-doubt/spiderwebs",
       "key": "Bb Major"
+    },
+    {
+      "added": "2026-01-06",
+      "artist": "Paramore",
+      "gp": "/files/uploads/paramore-—-still-into-you.gp",
+      "technique": "Pick",
+      "pdf": "/files/uploads/still-into-you.pdf",
+      "tuning": "Drop D",
+      "title": "Still Into You",
+      "id": "paramore/still-into-you",
+      "key": "F"
     }
   ]
 }
